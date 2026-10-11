@@ -71,6 +71,42 @@ The pipeline:
 
 ---
 
+## 📸 Output & Visualizations
+
+### Geospatial Flood Inundation Overlay (Kaziranga AOI)
+
+<p align="center">
+  <img src="assets/flood_extent_output.png" alt="OptiSAR Rescue Flood Extent Mapping" width="100%">
+</p>
+
+### 🔍 Output Summary — What You Are Seeing
+
+| Visual Layer | Color Indicator | What It Represents | Why It Matters |
+|---|---|---|---|
+| **Permanent River Channel** | 🟦 **Cyan / Light Blue** | Baseline river bodies and lakes extracted via **Sentinel-2 Optical (NDWI > 0)**. | Establishes normal water boundaries so normal water flow is never misclassified as a flood. |
+| **Active Flood Inundation** | 🟦 **Dark Blue** | Terrain submerged by overflow, detected via **Sentinel-1 SAR Radar (VV < -15 dB)**. | Isolates newly drowned terrain and wildlife habitats (~5 sq. km) needing urgent rescue focus. |
+| **Critical Boundary Margins** | 🔴 **Red Indicators** | High-risk flood fronts and active transition edges where water breaches land. | Pinpoints active spillover zones to help emergency teams prioritize evacuation routes. |
+| **Monsoon Cloud Cover** | ☁️ **White Clouds (Top-Left)** | Natural storm cloud cover visible on the optical background layer. | **Proof of SAR capability:** Optical cameras are blinded by clouds, but radar penetrates right through them. |
+
+---
+
+### 💡 How It Works in Simple Terms (The 3-Step Logic)
+
+1. **🛰️ Piercing Through the Clouds (Sentinel-1 SAR):**
+   Monsoon floods come with heavy rain and thick storm clouds. Standard satellite cameras cannot see through clouds. **Sentinel-1 SAR** sends active radar pulses down to Earth:
+   - Smooth water acts like a mirror, reflecting radar pulses away (appears as dark backscatter $< -15\text{ dB}$).
+   - Rough land bounces radar back to the satellite (appears bright).
+   - *Result:* Detects **all surface water** — 24/7, rain or shine, through dense monsoon clouds.
+
+2. **🌊 Filtering Out Regular Rivers (Sentinel-2 Optical):**
+   Just knowing where water is isn't enough — permanent rivers shouldn't trigger flood disaster alarms. We use pre-flood **Sentinel-2 optical imagery** and the Normalized Difference Water Index (NDWI) to map where water naturally flows year-round.
+
+3. **🎯 Isolating the Disaster Extent:**
+   $$\text{True Flood Inundation} = \text{Total Radar Water} - \text{Permanent Optical Water}$$
+   Subtracting baseline water leaves strictly the **newly flooded ground (~5 sq. km)**, eliminating false alarms and providing disaster response teams with high-confidence geospatial coordinates.
+
+---
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -99,6 +135,8 @@ jupyter notebook notebooks/flood_extent_mapping.ipynb
 
 ```
 OptiSAR-Rescue/
+├── assets/
+│   └── flood_extent_output.png      # Output visualization preview
 ├── notebooks/
 │   └── flood_extent_mapping.ipynb   # Main analysis notebook
 ├── src/
